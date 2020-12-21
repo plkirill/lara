@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\NewsController;
-use \App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,8 +29,22 @@ Route::get('/project', function () {
 Route::get('/page', function () {
     return view('page');
 }); */
+Route::group([
+    'prefix' => 'news',
+    'as' => 'news::',
+], function () {
+    Route::get('/',  [NewsController::class, 'index'])
+        ->name('categories');
 
-// news
+    Route::get('/card/{id}', [NewsController::class, 'newsCard'])
+        ->name('card')
+        ->where('id', '[0-9]+');
+
+    Route::get('/{categoryId}', [NewsController::class, 'list'])
+        ->name('list')
+        ->where('categoryId', '[0-9]+');
+});
+/*// news
 Route::get('/news', [NewsController::class, 'index']);
 
 Route::get('/news/card/{id}', [NewsController::class, 'newsCard'])
@@ -44,5 +57,5 @@ Route::get('/categories/{id}', [CategoryController::class, 'newsCategory'])
     ->name('news-category')
     ->where('id', '\d+');
 
-Route::get('/page', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/page', [\App\Http\Controllers\HomeController::class, 'index']);*/
 
